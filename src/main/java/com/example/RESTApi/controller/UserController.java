@@ -2,6 +2,7 @@ package com.example.RESTApi.controller;
 
 import com.example.RESTApi.model.User;
 import com.example.RESTApi.service.UserService;
+import com.example.RESTApi.utils.ResponseMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,25 +31,29 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
+    public ResponseEntity<ResponseMessage<User>> registerUser(@RequestBody User user) {
         try {
-            return ResponseEntity.ok(userService.register(user).toString());
+            return ResponseEntity.ok(userService.register(user));
         } catch (IllegalArgumentException e) {
-            System.out.println("QQQQ");
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new ResponseMessage<>(false, e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseMessage<>(false, e.getMessage()));
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<ResponseMessage<String>> loginUser(@RequestParam String email,
+            @RequestParam String password) {
         try {
             return ResponseEntity.ok(userService.login(email, password));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(401).body(e.getMessage());
+            return ResponseEntity.status(401).body(new ResponseMessage<>(false, e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseMessage<>(false, e.getMessage()));
         }
     }
 

@@ -11,6 +11,8 @@ import javax.management.RuntimeErrorException;
 import com.example.RESTApi.model.User;
 import com.example.RESTApi.repository.UserRepository;
 import com.example.RESTApi.utils.JwtUtil;
+import com.example.RESTApi.utils.ResponseMessage;
+
 // password hashing 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -33,7 +35,7 @@ public class UserService {
     }
 
     // REGISTRATION METHOD
-    public User register(User newUser) throws Exception {
+    public ResponseMessage<User> register(User newUser) throws Exception {
 
         if (newUser == null) {
             throw new IllegalArgumentException("User Data is required");
@@ -43,17 +45,19 @@ public class UserService {
         }
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
-        return userRepository.save(newUser);
+        userRepository.save(newUser);
+        return new ResponseMessage<User>(false, "New User Created", newUser);
 
     }
 
     // LOGIN METHOD
-    public String login(String email, String password) throws Exception {
+    public ResponseMessage<String> login(String email, String password) throws Exception {
         Optional<User> user = findByEmail(email);
         if (user.isPresent()) {
             if (passwordEncoder.matches(password, user.get().getPassword())) {
                 System.out.println("PASSWORD MATCHED & GENERATING TOKEN[+]");
-                return jwtUtil.generateToken(email);
+                String token = jwtUtil.generateToken(user.get().getId());
+                return new ResponseMessage<String>(false, "Login successfull", token);
             } else {
                 throw new Exception("Invalid credentials");
             }

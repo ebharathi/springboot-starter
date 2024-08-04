@@ -17,7 +17,7 @@ public class JwtUtil {
 
     private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // Use a proper key for signing
 
-    public String extractUsername(String token) {
+    public String extractUserId(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -49,15 +49,16 @@ public class JwtUtil {
     }
 
     // GENERATE TOKEN METHOD
-    public String generateToken(String username) {
-        System.out.println("GENERATING JWT TOKEN FOR " + username);
+    public String generateToken(String userId) {
+        System.out.println("GENERATING JWT TOKEN FOR " + userId);
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        return createToken(claims, userId);
     }
 
     // VALIDATE TOKEN METHOD
-    public Boolean validateToken(String token, String username) {
-        final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
+    public Boolean validateToken(String token) {
+        final String extractedUserId = extractUserId(token);
+        System.out.println("EXTRACTED USERID: " + extractedUserId);
+        return !isTokenExpired(token);
     }
 }
