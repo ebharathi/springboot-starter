@@ -24,9 +24,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	 // JJWT (Java JWT: JSON Web Token for Java and Android)
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // For password hashing (BCrypt)
+    implementation 'org.springframework.security:spring-security-core'
 }
 
 tasks.named('test') {

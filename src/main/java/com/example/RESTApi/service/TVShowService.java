@@ -37,4 +37,22 @@ public class TVShowService {
             return null;
         }
     }
+
+    public String getTVShowById(String seriesId) {
+        String url = "https://api.themoviedb.org/3/tv/" + seriesId + "?language=en-US";
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", "Bearer " + token)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful())
+                throw new Exception("Unexpected Error , Failed to fetch series");
+            return response.body().string();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"error\":\"Failed to fetch movies\"}";
+        }
+    }
 }

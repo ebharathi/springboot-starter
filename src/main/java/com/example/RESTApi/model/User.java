@@ -10,6 +10,7 @@ public class User {
     private String id;
     private String email;
     private String name;
+    private String password;
 
     // Getters and Setters are used to validate when inserting into db
     public String getId() {
@@ -34,6 +35,14 @@ public class User {
 
     public void setname(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }
